@@ -1,0 +1,34 @@
+# Primary Goals
+- [ ] Keep track of upcoming tasks
+  - Tasks must have:
+    - [ ] Title
+    - [ ] Due Date
+    - [ ] Start Date
+    - [ ] Notes (with full HTML support, like Outlook tasks)
+    - [ ] Priority
+    - [ ] Time estimate
+    - [ ] Assignee?
+- [ ] Display multiple calendars in a single, weekly view
+  - Calendar should look like Outlook view, where previous days are grayed out, and current day has a line indicating the current time.
+- [ ] Automatically place tasks on the calendar next to current events
+  - Base this on due date, start date, time estimate, and Priority
+  - [ ] Allow tasks to be split up into smaller segments (on for 30 min splits by default)
+  - [ ] Have button (or automatically do this) to reschedule all unfinished tasks
+- [ ] For urgent+important events, add to calendar as Busy
+- [ ] Log time spent on each task and event
+  - [ ] When marking an item complete, ask how much time to log, defaulting to that task's time estimate
+  - [ ] 
+  - Ideally this will be in the same calendar view as the main view
+
+# Stretch Goals
+- [ ] Allow recurring tasks
+- [ ] Create projects that tasks can be associated to
+- [ ] Add support for multiple users joining a team/organization
+- [ ] Add smart-typing to task creation.
+  - [ ] Highlight the text (such as making it blue) if any of the below conditions are met.
+  - [ ] Time Estimate: [0-9]+m = number of minutes, [0-9]+h = number of hours
+  - [ ] Due Date: any valid date format, any valid day name or abbreviation (Friday, Mon), any relative reference (in 3 days, tomorrow, )
+    - [ ] Optionally the user can add the word "Due" in front of the date. Required if Start Date is also included.
+  - [ ] Start Date: Same as Due Date but requires the word "Start(ing)" before it
+  - [ ] Assignee: @ tag any user in the team/organization
+  - [ ] Priority: ! followed by the Priority
