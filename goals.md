@@ -32,3 +32,4 @@
   - [ ] Start Date: Same as Due Date but requires the word "Start(ing)" before it
   - [ ] Assignee: @ tag any user in the team/organization
   - [ ] Priority: ! followed by the Priority
+- [ ] Convert from LocalStorage to database
