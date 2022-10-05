@@ -1,19 +1,20 @@
 # Primary Goals
 - [ ] Keep track of upcoming tasks
   - Tasks must have:
-    - [ ] Title
-    - [ ] Due Datetime
-    - [ ] Start Datetime
+    - [x] Title
+    - [x] Due Datetime
+    - [x] Start Datetime
     - [ ] Notes (with full HTML support, like Outlook tasks)
-    - [ ] Priority (Possibly pull from Motion: ASAP, Hard Deadline, Soft Deadline, No Deadline (Which opens up the options to pick from different weeks to "Try to do within"))
-    - [ ] Time estimate
+    - [x] Priority (Possibly pull from Motion: ASAP, Hard Deadline, Soft Deadline, No Deadline
+    - [x] Time estimate
     - [ ] Shift (Default to Work Hours)
     - [ ] Recurring (Default to False)
-    - [ ] Assignee?
+    - [ ] Assignee (Default to userId=1)
+- [ ] Use an algorithm to calculate task order, based on due date, start date, time estimate, and priority.
 - [ ] Display multiple calendars in a single, weekly view
   - Calendar should look like Outlook view, where previous days are grayed out, and current day has a line indicating the current time.
 - [ ] Automatically place tasks on the calendar next to current events
-  - Base this on due date, start date, time estimate, and Priority
+  - Base this on due date, start date, time estimate, and priority
   - Create time blocks for each day in which tasks and events can be scheduled
   - [ ] Allow tasks to be split up into smaller segments (on for 30 min splits by default)
   - [ ] Have button (or automatically do this) to reschedule all unfinished tasks
@@ -22,25 +23,32 @@
   - [ ] When marking an item complete, ask how much time to log, defaulting to that task's time estimate
   - [ ] Have regular tasks (Helping Employees, Other Messages, etc.) that that can be quickly selected in a sidebar to start tracking time for. Can manually adjust the time as well. Basically like toggl but with quick-select options for the regulars.
   - Ideally this will be in the same calendar view as the main view
+- [ ] Convert from LocalStorage to database
 
 # Stretch Goals
 - [ ] Allow recurring tasks
-- [ ] Notify user if tasks are behind schedule ("3 tasks are after soft deadline" with a yellow or red icon next to it for soft/hard; Option B: have a risk on each task based on how close it is to the deadline, this could be used for prioritization as a whole)
+- [ ] Task search feature
+- [ ] Indicator for how close tasks are to the due date. Notify user if tasks are behind schedule ("3 tasks are after soft deadline" with a yellow or red icon next to it for soft/hard; Option B: have a risk on each task based on how close it is to the deadline, this could be used for prioritization as a whole)
 - [ ] Sidebar showing all upcoming tasks, grouped by date. Perhaps this only shows the tasks that couldn't be scheduled by their due date or something like that.
 - [ ] All user to designate different time blocks (during work, after work, etc.) in which tasks/events can be scheduled, depending on the item.
+- [ ] Be able to view/modify details for multiple tasks at once (for referencing each other)
+- [ ] Link tasks together, like saying Task B "depends on" Task A. Which means Task B wouldn't be scheduled before Task A.
+- [ ] When rescheduling tasks, add an indicator to show that their allotted time is not yet determined. E.g. instead of "Feb 9 10:30 AM" say "Scheduling...".
 - [ ] Add an option for breaks. Like "Don't schedule anything for me from 6-9 tonight because I just need a break." Idk if this is possible because it would basically just be adding an event in there called "Break".
 - [ ] Create projects that tasks can be associated to
 - [ ] Add support for multiple users joining a team/organization
 - [ ] Add smart-typing to task creation.
   - [ ] Highlight the text (such as making it blue) if any of the below conditions are met.
-  - [ ] Time Estimate: [0-9]+m = number of minutes, [0-9]+h = number of hours
+  - [ ] Time Estimate: r'[0-9]+m' = number of minutes, r'[0-9]+h' = number of hours
   - [ ] Due Date: any valid date format, any valid day name or abbreviation (Friday, Mon), any relative reference (in 3 days, tomorrow, )
     - [ ] Optionally the user can add the word "Due" in front of the date. Required if Start Date is also included.
   - [ ] Start Date: Same as Due Date but requires the word "Start(ing)" before it
   - [ ] Assignee: @ tag any user in the team/organization
   - [ ] Priority: ! followed by the Priority
-- [ ] Convert from LocalStorage to database
 - [ ] When tasks are moved around on the schedule, have them shift around in an animated way. It would feel really satisfying.
 - [ ] Automatically push tasks down when logging for a task conflicts with previously scheduled class (e.g. if scheduled to work on Epic Training at 12:30 but there's still a timer going for Helping Employees, automatically push Epic Training down and adjust everything else as needed)
 - [ ] Be able to drag and drop the time logs on the calendar and resize them
 - [ ] Undo button
+- [ ] Have "no deadline" open up the options to pick from different weeks to "Try to do within"
+- [ ] Be able to add notes to calendar events (that were synced from external calendar).
+- [ ] Add flexible events so that you can schedule events with people that automatically change to find the right spot. I believe this is built into Google, so maybe we can snag that.
