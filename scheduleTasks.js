@@ -1,8 +1,9 @@
+import {formatDatetimeForTaskList} from './datetimeFormat.js'
+
 // Finished compare(), which is the system to order the tasks based on Urgency then Due Date (excluding future start dates, as those are all at the end and in order of Start Date).
 // Also set schedule() to just assign 1 task per day, from the top of the priority list to the bottom.
 
 // NEXT UP:
-// Before diving too much further, see if the Google flexible event feature will cover most of this by automatically finding a good place for each task. But I suppose the problem is we'd have to then access those and move them around. But we'll probably be doing that anyway, once we have integration with calendars...
 // Based on the below (particularly getAvailableTime()),
 // it's clear that I just need to start assigning workTimePlanned to each task.
 // If everything has a work time, I can use that to calculate how much time
@@ -27,7 +28,7 @@
 // Example: parent: 9h long, due in 3 days. childA: 3h, due tomorrow, childB: 3h, due in 2 days, childC: 3h, due date matching parent. We could also space it out if needed. For example, if parent: 9h, due in 18 days, then childA: 3h, due in 6 days, childB: 3h, due in 12 days, and childC: 3h, due date matching parent.
 
 
-import { formatDatetimeForTaskList } from './datetimeFormat.js';
+// import { formatDatetimeForTaskList } from './datetimeFormat.js';
 
 
 const SCHEDULE_DISTANCE_DEFAULT = 14
@@ -62,18 +63,26 @@ function prioritize(tasks) {
 
 export function schedule(tasks) {
   tasks = prioritize(tasks);
-
+  let currDateTime = getNextDate(new Date())
+  console.log(tasks.length)
   for (let i = 0; i < tasks.length; i++) {
     const currTask = tasks[i];
 
-    const today = new Date();
-    const nextDate = getNextDate(today, i)
-    const daysToCheck = SCHEDULE_DISTANCE_DEFAULT - i
-    const wtPlanned = workTimeNextAvailable(nextDate, daysToCheck);
-    
-    //console.log(nextDate.getDate(), daysToCheck, wtPlanned);
+    // Set currDateTime to now,
+    // and look for slots in the future,
+    // then grab the first one.
+    // Then update currDateTime to match the end datetime
+    // of the slot that was just returned.
+    // Rinse and repeat until currDateTime > maxDateTime,
+    // which is calculated based on numDaysToCheck.
 
+    const daysToCheck = SCHEDULE_DISTANCE_DEFAULT - i
+    console.log(daysToCheck)
+    const wtPlanned = workTimeNextAvailable(currDateTime, daysToCheck);
+
+    if (!wtPlanned) { break }
     currTask.workTimePlanned = wtPlanned;
+    currDateTime = new Date(wtPlanned.endDateTime);
   }
 }
 
@@ -126,41 +135,58 @@ function logTopThree(taskList) {
       (`Start: ${formatDatetimeForTaskList(task.startDateTime)}`) : ('');
     const dueDateTimeHtml = task.dueDateTime ?
       (`Due: ${formatDatetimeForTaskList(task.dueDateTime)}`) : ('');
-    console.log(`Task ${nameHtml} ${startDateTimeHtml}. ${dueDateTimeHtml}.`);
+    // console.log(`Task ${nameHtml} ${startDateTimeHtml}. ${dueDateTimeHtml}.`);
   });
 }
 
 
 function workTimeNextAvailable(startDateTime, numDaysToCheck) {
-  // For the next SCHEDULE_DISTANCE_DEFAULT days if date range not defined
-  // workTimeDefaultDaily - (sum of all tasks with workTimePlanned on this day)
+  if (!numDaysToCheck) { numDaysToCheck = SCHEDULE_DISTANCE_DEFAULT };
+  // Do I want to find the next OPEN slot and place something in there,
+  // or do I simply want to find the next WORKTIME block and fill it in?
 
-  // Does NOT support multiple WT slots on the same day, yet.
-
-  for (let i = 0; i < numDaysToCheck; i++) {
-    const currDate = getNextDate(startDateTime, i);
-    const currDayOfWeek = currDate.getDay();
-    const currWtDay = WORKTIME[currDayOfWeek];
-    if (currWtDay.length > 0) {
-      const currWtBlock = currWtDay[0]
-      const currWtBlockStart = currWtBlock['startTime']
-      const currWtBlockEnd = currWtBlock['endTime']
-      const nextAvailable = {
-        startDateTime: new Date(currDate.setHours(currWtBlockStart[0], currWtBlockStart[1], 0, 0)),
-        endDateTime: new Date(currDate.setHours(currWtBlockEnd[0], currWtBlockEnd[1], 0, 0))
-      }
-      console.log(nextAvailable['startDateTime'].toISOString());
-      return nextAvailable;
+  const wtSlots = generateFutureWorkTimeSlots(startDateTime, numDaysToCheck);
+  console.log(wtSlots[0])
+  // Scan the list of upcoming worktimes,
+  // and find the first one in the future
+  for (let i = 0; i < wtSlots.length; i++) {
+    const slot = wtSlots[i]
+    console.log(slot)
+    if (slot.startDateTime > startDateTime) {
+      return slot;
     }
-  }
+  };
+
   // If it makes it to this point, there are no upcoming worktime slots
   return null;
 }
 
 
+function generateFutureWorkTimeSlots(startDateTime, numDaysToCheck) {
+  if (!numDaysToCheck) { numDaysToCheck = SCHEDULE_DISTANCE_DEFAULT };
+  const wtSlots = [];
+  let currDate = new Date(startDateTime);
+  for (let i = 0; i < numDaysToCheck; i++) {
+    const currDayOfWeek = currDate.getDay();
+    console.log(currDayOfWeek)
+    console.log(currDate)
+    const currWtDay = WORKTIME[currDayOfWeek];
+    for (let j = 0; j < currWtDay.length; j++) {
+      const currWtBlock = currWtDay[j]
+      const currWtBlockStart = currWtBlock['startTime']
+      const currWtBlockEnd = currWtBlock['endTime']
+      wtSlots.push({
+        startDateTime: new Date(currDate.setHours(currWtBlockStart[0], currWtBlockStart[1], 0, 0)),
+        endDateTime: new Date(currDate.setHours(currWtBlockEnd[0], currWtBlockEnd[1], 0, 0))
+      });
+      console.log(wtSlots[wtSlots.length - 1])
+    }
+    currDate = getNextDate(new Date(currDate));
+    console.log(currDate)
+  }
+  return wtSlots;
+}
 
-// Do I want to find the next OPEN slot and place something in there,
-// or do I simply want to find the next WORKTIME block and fill it in?
 
 
 
@@ -179,6 +205,7 @@ function getEstTimeP1P2(startDateTime, endDateTime) {
 
 
 function getNextDate(startDate, daysToAdvance) {
+  if (!daysToAdvance) { daysToAdvance = 1 };
   const nextDate = new Date(startDate.setDate(startDate.getDate() + daysToAdvance));
   nextDate.setHours(0, 0, 0, 0);
   return nextDate;
