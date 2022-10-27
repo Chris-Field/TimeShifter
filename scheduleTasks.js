@@ -64,7 +64,7 @@ function prioritize(tasks) {
 export function schedule(tasks) {
   tasks = prioritize(tasks);
   let currDateTime = getNextDate(new Date())
-  console.log(tasks.length)
+
   for (let i = 0; i < tasks.length; i++) {
     const currTask = tasks[i];
 
@@ -77,9 +77,8 @@ export function schedule(tasks) {
     // which is calculated based on numDaysToCheck.
 
     const daysToCheck = SCHEDULE_DISTANCE_DEFAULT - i
-    console.log(daysToCheck)
-    const wtPlanned = workTimeNextAvailable(currDateTime, daysToCheck);
 
+    const wtPlanned = workTimeNextAvailable(currDateTime, daysToCheck);
     if (!wtPlanned) { break }
     currTask.workTimePlanned = wtPlanned;
     currDateTime = new Date(wtPlanned.endDateTime);
@@ -146,12 +145,11 @@ function workTimeNextAvailable(startDateTime, numDaysToCheck) {
   // or do I simply want to find the next WORKTIME block and fill it in?
 
   const wtSlots = generateFutureWorkTimeSlots(startDateTime, numDaysToCheck);
-  console.log(wtSlots[0])
+
   // Scan the list of upcoming worktimes,
   // and find the first one in the future
   for (let i = 0; i < wtSlots.length; i++) {
     const slot = wtSlots[i]
-    console.log(slot)
     if (slot.startDateTime > startDateTime) {
       return slot;
     }
@@ -168,8 +166,6 @@ function generateFutureWorkTimeSlots(startDateTime, numDaysToCheck) {
   let currDate = new Date(startDateTime);
   for (let i = 0; i < numDaysToCheck; i++) {
     const currDayOfWeek = currDate.getDay();
-    console.log(currDayOfWeek)
-    console.log(currDate)
     const currWtDay = WORKTIME[currDayOfWeek];
     for (let j = 0; j < currWtDay.length; j++) {
       const currWtBlock = currWtDay[j]
@@ -179,10 +175,8 @@ function generateFutureWorkTimeSlots(startDateTime, numDaysToCheck) {
         startDateTime: new Date(currDate.setHours(currWtBlockStart[0], currWtBlockStart[1], 0, 0)),
         endDateTime: new Date(currDate.setHours(currWtBlockEnd[0], currWtBlockEnd[1], 0, 0))
       });
-      console.log(wtSlots[wtSlots.length - 1])
     }
     currDate = getNextDate(new Date(currDate));
-    console.log(currDate)
   }
   return wtSlots;
 }

@@ -355,6 +355,10 @@ function getFromLocalStorage() {
   TASKS.forEach((task) => {
     task.startDateTime = new Date(task.startDateTime);
     task.dueDateTime = new Date(task.dueDateTime);
+    if (task.workTimePlanned) {
+      task.workTimePlanned.startDateTime = new Date(task.workTimePlanned.startDateTime);
+      task.workTimePlanned.endDateTime = new Date(task.workTimePlanned.endDateTime);
+    }
   });
 
   schedule(TASKS);
