@@ -4,8 +4,7 @@ import {
   zeroPaddedDate,
   zeroPaddedtime
 } from './datetimeFormat.js';
-
-
+import { Task } from './task.js';
 
 
 /////////////////////// TO DO ////////////////////////////////
@@ -59,7 +58,8 @@ taskForm.addEventListener('submit', function(event) {
   ]);
   hideTaskForm();
 
-  saveTask(collectTaskDetailsFromForm());
+  const taskDetails = collectTaskDetailsFromForm();
+  taskDetails.saveTask(TASKS);
 });
 
 
@@ -146,61 +146,11 @@ function showHideTimeInputFields(selectedField) {
   }
 }
 
-// function to add task
-function saveTask(task) {
-  // if task is not empty
-  if (task !== null) {
-
-    // Check if task already exists.
-    // If so, update details.
-    // Otherwise add it to tasks array.
-    const taskIndex = matchingTaskIndex(task.id);
-    if (taskIndex > -1) {
-      console.log("Saving task detail for existing task: ");
-      console.log(task);
-      updateTask(taskIndex, task);
-    } else {
-      console.log("Saving task detail for new task: ");
-      console.log(task);
-      TASKS.push(task);
-    }
-
-    schedule(TASKS);
-
-    // Update task list on screen and update local storage
-    renderTaskList(TASKS);
-    saveToLocalStorage(TASKS);
-
-  }
-}
-
-
-function matchingTaskIndex(id) {
-  const taskIndexInArray = TASKS.findIndex(element => element.id == id);
-  return taskIndexInArray;
-}
-
 
 function collectTaskDetailsFromArray(id) {
 
   // Set the default values
-  // TODO: convert to class (task = New Task(id, name, startDateTime...))
-  const task = {
-    id: Date.now(),
-    name: '',
-    startDateTime: new Date(new Date().setHours(0, 0, 0, 0)),
-    dueDateTime: new Date(new Date().setHours(23, 59, 0, 0)),
-    urgency: 'task-urgency-3',
-    estTimeTillFinished: '',
-    shift: 'Work hours',
-    recurring: false,
-    assignee: 1,
-    notes: quill.getContents(),
-    completed: false,
-    // Hidden fields
-    workTimePlanned: null,
-    parent: null
-  };
+  const task = new Task();
 
   // Fill in values from the task pulled from array
   if (id) {
@@ -272,7 +222,7 @@ function hideTaskForm() {
 
 
 // function to render given tasks to screen
-function renderTaskList(tasks) {
+export function renderTaskList(tasks) {
   // clear everything inside <ul> with class=task-list
   taskList.innerHTML = '';
 
@@ -335,12 +285,6 @@ function renderTaskList(tasks) {
 }
 
 
-function saveToLocalStorage(tasks) {
-  // convert the array to string then store it.
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
-
-
 function getFromLocalStorage() {
   const reference = localStorage.getItem('tasks');
 
@@ -384,51 +328,25 @@ function toggleChecked(id) {
 }
 
 
-function updateTask(taskIndex, updatedTaskDetails) {
-  // Update task details
-  TASKS[taskIndex] = updatedTaskDetails;
-  // Update localstorage
-  saveToLocalStorage(TASKS);
-}
-
-
-// Deletes the task from tasks array,
-// then updates localstorage 
-// and renders updated list to screen
-function deleteTask(id) {
-
-  // filters out the <li> with the id and updates the tasks array
-  TASKS = TASKS.filter(function(task) {
-    // Use != not !==, because here types are different:
-    // number vs. string.
-    return task.id != id;
-  });
-
-  // update the localStorage
-  saveToLocalStorage(TASKS);
-  // render them to screen
-  renderTaskList(TASKS);
-}
-
 // Gather the input from all the fields when saving the task
 function collectTaskDetailsFromForm() {
 
   console.log("Collecting task data from details popup:")
   const taskDetailWindow = document.querySelector('.task-detail-popup');
 
-  const task = {
-    id: taskDetailWindow.getAttribute('data-key'),
-    name: document.querySelector('input[name="task-name"]').value,
-    startDateTime: collectDateTimeFromForm('start'),
-    dueDateTime: collectDateTimeFromForm('due'),
-    urgency: document.querySelector('input[name="task-urgency"]:checked').id,
-    estTimeTillFinished: document.querySelector('select[name="task-est-time-till-finished"]').value,
-    shift: 'Work hours',
-    recurring: false,
-    assignee: 1,
-    notes: quill.getContents(),
-    completed: false
-  };
+  const task = new Task(
+  taskDetailWindow.getAttribute('data-key'),
+  document.querySelector('input[name="task-name"]').value,
+  collectDateTimeFromForm('start'),
+  collectDateTimeFromForm('due'),
+  document.querySelector('input[name="task-urgency"]:checked').id,
+  document.querySelector('select[name="task-est-time-till-finished"]').value,
+  'Work hours',
+  false,
+  1,
+  quill.getContents(),
+  false
+    )
   console.log('date pre-override: ' + task.startDateTime);
 
   overrideTaskDateTimeValues(task);

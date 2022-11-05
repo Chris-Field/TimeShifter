@@ -1,28 +1,21 @@
-import {formatDatetimeForTaskList} from './datetimeFormat.js'
+import { formatDatetimeForTaskList } from './datetimeFormat.js'
 
-// Finished compare(), which is the system to order the tasks based on Urgency then Due Date (excluding future start dates, as those are all at the end and in order of Start Date).
-// Also set schedule() to just assign 1 task per day, from the top of the priority list to the bottom.
+// It now assigns 1 task per time slot over the next 14 days. remaining tasks have a null workTimePlanned value
 
 // NEXT UP:
-// Based on the below (particularly getAvailableTime()),
-// it's clear that I just need to start assigning workTimePlanned to each task.
-// If everything has a work time, I can use that to calculate how much time
-// I have left each day to schedule.
-// And if necessary I can remove the workTimePlanned to put the task back
-// into the prioritization rotation (e.g. if it gets replaced by a higher priority).
-// I now have WORKTIME as a constant, which is a list of each day and its worktime block(s).
-// Working on workTimeNextAvailable().
-// Got it to work except for the fact that it pulls in duplicates when there are skipped days.
-// For example, it goes through each day of the week and finds the next available slot.
-// On Sunday it pulls Monday's slot, then on Monday it pulls Monday's slot again.
-// Maybe find a way to advance the date whenever it pulls a slot?
-// Or maybe this would be a good time to incorporate the multiple slots per day. For example, start right now and look for slots in the future and grab the first one. Then update the current datetime to match the end datetime of the slot that was just returned. Rinse and repeat until currDateTime > maxDateTime (which is calculated based on numDaysToCheck)
-// Then to assign the tasks, look for the first task in the list
+// I think the most important thing is to have a visual representation
+// so let's get a calendar view of the task list (weekly view).
+// To assign the tasks, look for the first task in the list
 // with minimum block size that is less than or equal to the slot size.
-// (using compare(), even if there is already a workTimePlanned that is after
-// the time slot because we want to override it if we find a better slot).
 // For now minBlockSize can just be estTimeTillFinished
 // so that we don't have to dive into the world of parent/child just yet.
+// Then we need to start allowing multiple items per time slot if there is room.
+// For example, once a time slot is assigned,
+// the scheduler's current time is updated to wtPlanned.endDateTime.
+// I need to do 2 things:
+//   Make wtPlanned.endDateTime reflect the earliest value 
+//     between wtSlot's endDateTime and the task's est finish datetime
+//   Make a new slot from the leftover time in that wtSlot (if greater than 0m)
 
 // At some point I should probably break up parents into children. Then give each child a (less important) due date, which is based on the parent due date but distributed between the days between now and the parent due date. There should probably be a universal maxBlockSize, which is 3 hours or something. So the child blocks would have a size of 3h unless broken up to fit in before their child due date.
 // Example: parent: 9h long, due in 3 days. childA: 3h, due tomorrow, childB: 3h, due in 2 days, childC: 3h, due date matching parent. We could also space it out if needed. For example, if parent: 9h, due in 18 days, then childA: 3h, due in 6 days, childB: 3h, due in 12 days, and childC: 3h, due date matching parent.
@@ -79,9 +72,12 @@ export function schedule(tasks) {
     const daysToCheck = SCHEDULE_DISTANCE_DEFAULT - i
 
     const wtPlanned = workTimeNextAvailable(currDateTime, daysToCheck);
-    if (!wtPlanned) { break }
+    // set the workTimePlanned, even if it's null,
+    // to overwrite the task's existing workTimePlanned
     currTask.workTimePlanned = wtPlanned;
-    currDateTime = new Date(wtPlanned.endDateTime);
+    if (wtPlanned) {
+      currDateTime = new Date(wtPlanned.endDateTime);
+    }
   }
 }
 
