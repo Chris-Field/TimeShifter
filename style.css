@@ -1,4 +1,15 @@
-/* common styles */
+/************************** Reference Links **************************
+CSS Selectors: https://www.reddit.com/r/webdev/comments/ur6v5m/css_selectors_visually_explained/
+
+Buttons: https://www.reddit.com/r/webdev/comments/uq104d/100_css_buttons_code_in_the_replies/
+
+Flexbox: https://www.reddit.com/r/webdev/comments/usln38/a_visual_reference_of_css_flexbox/
+
+CSS Grid: https://www.reddit.com/r/webdev/comments/uxrhf4/css_grid_summarized_in_one_image/
+************************** Reference Links Ends **************************/
+
+
+/************************** common styles **************************/
 * {
   padding: 0;
   margin: 0;
@@ -9,22 +20,81 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  background: linear-gradient(#F00000, #DC281E);
+  background: linear-gradient(170deg, #F00000, #bd006e);
   font-family: sans-serif;
-}
-
-button:hover {
-  cursor: pointer;
-  background-color: #73E831;
 }
 
 ul {
   list-style-type: none; /* get rid of bullet points on side of list items */
 }
 
-/* common style ends */
+/************************** common style ends **************************/
 
-/* container */
+/************************** task-detail **************************/
+
+.task-detail-popup {
+  display: none;
+  position: absolute;
+  text-align: center;
+  top: 20%;
+  align-items: center;
+  padding: 20px;
+  background: #dbdbdb;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+}
+
+.task-detail {
+  margin: 40px 0px;
+}
+
+.task-detail input {
+  width: 250px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.task-detail .hidden {
+  display: none;
+}
+
+.save-button {
+  background-color: #0000ff;
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 1.2rem;
+}
+
+.save-button:hover {
+  cursor: pointer;
+  background-color: #73E831;
+}
+
+.cancel-button {
+  background: none;
+  color: #4a4a4a;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 0.9rem;
+}
+
+.cancel-button:hover {
+  cursor: pointer;
+  background-color: #ff0000;
+}
+
+/************************** task-detail style ends **************************/
+
+/************************** container **************************/
 .container {
   min-width: 700px;
   display: flex;
@@ -38,57 +108,27 @@ h1 {
   font-size: 3rem;
 }
 
-/* todo-form */
-
-.todo-form {
-  margin: 40px 0px;
-}
-
-.todo-input {
-  width: 250px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  padding: 10px;
-  margin-right: 10px;
-  font-size: 1rem;
-}
-
-.add-button {
-  background-color: #0000ff;
-  color: #fff;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  padding: 7px;
-  font-size: 1.2rem;
-}
-
-/* todo-form style ends */
-
-/* todo-items */
-.todo-items {
+/************************** task-list **************************/
+.task-list {
   min-width: 350px;
 }
 
-/* each li with class="item" */
-.item {
+/* each li with class="task" */
+.task {
   background-color: #fff;
   padding: 10px;
   font-size: 1.1rem;
 }
 
-.item:first-child {
+.task:first-child {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
 }
 
-.item:last-child {
+.task:last-child {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
 }
-
-/* item style end */
 
 .checkbox {
   margin-right: 10px;
@@ -106,11 +146,11 @@ h1 {
   font-weight: 550;
 }
 
-/* applied when the todo item is checked */
+/* applied when the task item is checked */
 .checked { 
   text-decoration: line-through;
 }
 
-/* todo-items style ends */
+/************************** task-list style ends **************************/
 
-/* container style ends */
+/************************** container style ends **************************/
