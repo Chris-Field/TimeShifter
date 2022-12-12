@@ -4,7 +4,7 @@ import {
 } from './datetime-format.js';
 import { Task } from './task.js';
 import { deleteTask, findTaskById, loadTaskArray, saveTaskArray, updateTaskInArray } from './task-array.js';
-import { drawEventsOnCalendar } from './calendar.js'
+import { drawEventsOnCalendar, updateCalendarDayNumbers } from './calendar.js'
 
 /////////////////////// TO DO ////////////////////////////////
 // notes in scheduleTasks.js
@@ -109,6 +109,9 @@ taskForm.addEventListener('click', (event) => {
 
 // Draw the calendar
 drawEventsOnCalendar(taskArray);
+
+// Set the date numbers on the calendar
+updateCalendarDayNumbers();
 
 function hideDateTimeInputFields() {
   const dueDateTime = document.querySelector('.task-due');

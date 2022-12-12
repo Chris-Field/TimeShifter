@@ -1,3 +1,6 @@
+/**
+* Draw the events on the calendar.
+*/
 export function drawEventsOnCalendar(taskArray, numHours = 14, dayStartTime = 9, chunksPerHour = 4) {
   console.log('Building calendar');
   for (const task of taskArray) {
@@ -21,7 +24,27 @@ export function drawEventsOnCalendar(taskArray, numHours = 14, dayStartTime = 9,
     eventHtml.style.gridRowEnd = `span ${eventHeight}`;
 
     // Add the event to the calendar
-    const dayHtml = document.querySelector('.days > .mon > .events');
+    const dayHtml = document.querySelector('.days > .one > .events');
     dayHtml.append(eventHtml);
   }
+}
+
+/**
+* Set the date numbers on the calendar
+*/
+export function updateCalendarDayNumbers() {
+  const today = new Date();
+  const currDate = today;
+  const dateIso = currDate.toISOString();
+  const dateFormatted = dateIso.slice(0, 10);
+  const dateDay = currDate.getDate();
+  console.log(dateFormatted);
+  // Find the element for the day number
+  const currDayNumber = document.querySelector('.days > .one > .date > .date-num')
+  // Update the day number on the calendar
+  currDayNumber.innerHTML = dateDay;
+  // Update the day id
+  currDayNumber.id = dateFormatted;
+  // const nextDate = new Date(startDate.setDate(startDate.getDate() + daysToAdvance));
+
 }
