@@ -1,4 +1,4 @@
-export function formatDatetimeForTaskList( datetime ) {
+export function formatDatetimeForTaskArray( datetime ) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime);
   }
