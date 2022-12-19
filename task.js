@@ -36,13 +36,13 @@ export class Task {
     this.parent = taskDetails.parent ? taskDetails.parent : null;
   };
 
-
+  
   getMatchingTaskIndex(taskArray) {
     const taskIndexInArray = taskArray.findIndex(element => element.id == this.id);
     return taskIndexInArray;
   }
 
-
+  
   // toggle the value to completed and not completed
   toggleChecked() {
     // toggle the value
