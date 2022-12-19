@@ -4,7 +4,7 @@ import {
 } from './datetime-format.js';
 import { Task } from './task.js';
 import { deleteTask, findTaskById, loadTaskArray, saveTaskArray, updateTaskInArray } from './task-array.js';
-import { drawEventsOnCalendar, updateCalendarDayNumbers } from './calendar.js'
+import { drawEventsOnCalendar, updateCalendarDayNames, updateCalendarDayNumbers } from './calendar.js'
 
 /////////////////////// TO DO ////////////////////////////////
 // notes in scheduleTasks.js
@@ -37,7 +37,7 @@ saveTaskArray(taskArray, taskListHtml);
 
 // After that addEventListener <ul> with class=taskArray.
 // Because we need to listen for click event in all delete-button and checkbox
-taskListHtml.addEventListener('click', function(event) {
+taskListHtml.addEventListener('click', function (event) {
   // get id from data-key attribute's value of parent <li>
   const parentLi = event.target.closest('li');
   const taskId = parentLi.getAttribute('data-key');
@@ -64,14 +64,14 @@ taskListHtml.addEventListener('click', function(event) {
 
 // Add an eventListener on "new task" button,
 // and listen for click event.
-newTaskButton.addEventListener('click', function() {
+newTaskButton.addEventListener('click', function () {
   const task = new Task();
   displayTaskForm(task);
 });
 
 // Add an eventListener on task form,
 // and listen for submit event
-taskForm.addEventListener('submit', function(event) {
+taskForm.addEventListener('submit', function (event) {
   // Prevent the page from reloading when submitting the form
   event.preventDefault();
   // Add default HTML content to the HTML text editor
@@ -107,11 +107,14 @@ taskForm.addEventListener('click', (event) => {
 
 });
 
-// Draw the calendar
-drawEventsOnCalendar(taskArray);
+// Order the days of the week based on user preference
+updateCalendarDayNames();
 
 // Set the date numbers on the calendar
 updateCalendarDayNumbers();
+
+// Draw the calendar
+drawEventsOnCalendar(taskArray);
 
 function hideDateTimeInputFields() {
   const dueDateTime = document.querySelector('.task-due');
