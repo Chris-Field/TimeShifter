@@ -32,19 +32,30 @@ export function drawEventsOnCalendar(taskArray, numHours = 14, dayStartTime = 9,
 /**
 * Set the date numbers on the calendar
 */
-export function updateCalendarDayNumbers() {
-  const today = new Date();
-  const currDate = today;
-  const dateIso = currDate.toISOString();
-  const dateFormatted = dateIso.slice(0, 10);
-  const dateDay = currDate.getDate();
-  console.log(dateFormatted);
-  // Find the element for the day number
-  const currDayNumber = document.querySelector('.days > .one > .date > .date-num')
-  // Update the day number on the calendar
-  currDayNumber.innerHTML = dateDay;
-  // Update the day id
-  currDayNumber.id = dateFormatted;
-  // const nextDate = new Date(startDate.setDate(startDate.getDate() + daysToAdvance));
+export function updateCalendarDayNumbers(dayLimit = 7) {
+  const numberWordConversions = {
+    1: 'one',
+    2: 'two',
+    3: 'three',
+    4: 'four',
+    5: 'five',
+    6: 'six',
+    7: 'seven'
+  }
+  let currDate = new Date();
 
+  for (let i = 0; i < dayLimit; i++) {
+    currDate = new Date(currDate.setDate(currDate.getDate() + 1));
+
+    const dateDay = currDate.getDate();
+    // Find the element for the day number
+    const currDayNumber = document.querySelector(`.days > .${numberWordConversions[i + 1]} > .date > .date-num`)
+    // Update the day number on the calendar
+    currDayNumber.innerHTML = dateDay;
+    // Update the day id
+    // Zero-pad the day number
+    const dateIso = currDate.toISOString();
+    const dateFormatted = dateIso.slice(0, 10);
+    currDayNumber.id = dateFormatted;
+  }
 }
