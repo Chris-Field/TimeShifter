@@ -4,7 +4,7 @@ import {
 } from './datetime-format.js';
 import { Task } from './task.js';
 import { deleteTask, findTaskById, loadTaskArray, saveTaskArray, updateTaskInArray } from './task-array.js';
-import { drawEventsOnCalendar, updateCalendarDayNames, updateCalendarDayNumbers } from './calendar.js'
+import { assignDatesToCalendarDays, drawEventsOnCalendar, updateCalendarDayNames, updateCalendarDayNumbers } from './calendar.js'
 
 /////////////////////// TO DO ////////////////////////////////
 // notes in scheduleTasks.js
@@ -107,12 +107,12 @@ taskForm.addEventListener('click', (event) => {
 
 });
 
+// Set the calendar dates
+assignDatesToCalendarDays();
 // Order the days of the week based on user preference
 updateCalendarDayNames();
-
 // Set the date numbers on the calendar
 updateCalendarDayNumbers();
-
 // Draw the calendar
 drawEventsOnCalendar(taskArray);
 
