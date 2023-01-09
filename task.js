@@ -1,106 +1,51 @@
-import { schedule } from './scheduleTasks.js';
-import { renderTaskList } from './script.js';
-
 /** 
- * @param {number} [id]
- * @param {string} [name]
- * @param {Date} [startDateTime]
- * @param {Date} [dueDateTime]
- * @param {string} [urgency]
- * @param {string} [estTimeTillFinished]
- * @param {string} [shift]
- * @param {boolean} [recurring]
- * @param {number} [assignee]
- * @param {object} [notes]
- * @param {boolean} [completed]
- * @param {object} [workTimePlanned]
- * @param {number} [parent]
+ * @property {object} [taskDetails] - The details desired to apply to the task
+ * @property {number} [taskDetails.id]
+ * @property {string} [taskDetails.name]
+ * @property {Date} [taskDetails.startDateTime]
+ * @property {Date} [taskDetails.dueDateTime]
+ * @property {string} [taskDetails.urgency]
+ * @property {string} [taskDetails.estTimeTillFinished]
+ * @property {string} [taskDetails.shift]
+ * @property {boolean} [taskDetails.recurring]
+ * @property {number} [taskDetails.assignee]
+ * @property {object} [taskDetails.notes]
+ * @property {boolean} [taskDetails.completed]
+ * @property {object} [taskDetails.workTimePlanned]
+ * @property {number} [taskDetails.parent]
 */
 export class Task {
-  constructor(id, name, startDateTime, dueDateTime, urgency, estTimeTillFinished, shift, recurring, assignee, notes, completed, workTimePlanned, parent) {
-    this.id = id ? id : Date.now();
-    this.name = name ? name : '';
-    this.startDateTime = startDateTime ? startDateTime : new Date(new Date().setHours(0, 0, 0, 0));
-    this.dueDateTime = dueDateTime ? dueDateTime : new Date(new Date().setHours(23, 59, 0, 0));
-    this.urgency = urgency ? urgency : 'task-urgency-3';
-    this.estTimeTillFinished = estTimeTillFinished ? estTimeTillFinished : '30m';
-    this.shift = shift ? shift : 'Work hours';
-    this.recurring = recurring ? recurring : false;
-    this.assignee = assignee ? assignee : 1;
-    this.notes = notes ? notes : quill.getContents();
-    this.completed = completed ? completed : false;
+  constructor(taskDetails) {
+    // Create an empty object if taskDetails is not provided
+    if (!taskDetails) { taskDetails = {} };
+
+    // Set some default values for each field if nothing is set
+    this.id = taskDetails.id ? taskDetails.id : Date.now();
+    this.name = taskDetails.name ? taskDetails.name : '';
+    this.startDateTime = taskDetails.startDateTime ? taskDetails.startDateTime : new Date(new Date().setHours(0, 0, 0, 0));
+    this.dueDateTime = taskDetails.dueDateTime ? taskDetails.dueDateTime : new Date(new Date().setHours(23, 59, 0, 0));
+    this.urgency = taskDetails.urgency ? taskDetails.urgency : 'task-urgency-3';
+    this.estTimeTillFinished = taskDetails.estTimeTillFinished ? taskDetails.estTimeTillFinished : '30m';
+    this.shift = taskDetails.shift ? taskDetails.shift : 'Work hours';
+    this.recurring = taskDetails.recurring ? taskDetails.recurring : false;
+    this.assignee = taskDetails.assignee ? taskDetails.assignee : 1;
+    this.notes = taskDetails.notes ? taskDetails.notes : quill.getContents();
+    this.completed = taskDetails.completed ? taskDetails.completed : false;
     // Hidden fields
-    this.workTimePlanned = workTimePlanned ? workTimePlanned : null;
-    this.parent = parent ? parent : null;
+    this.workTimePlanned = taskDetails.workTimePlanned ? taskDetails.workTimePlanned : null;
+    this.parent = taskDetails.parent ? taskDetails.parent : null;
   };
 
-  
-  getMatchingTaskIndex(taskList) {
-    const taskIndexInArray = taskList.findIndex(element => element.id == this.id);
+
+  getMatchingTaskIndex(taskArray) {
+    const taskIndexInArray = taskArray.findIndex(element => element.id == this.id);
     return taskIndexInArray;
   }
 
-  
-  /**
-   * Save the task details in database
-   * @param {object} task - The task to save
-   * @param {array} taskList - Full list of all tasks
-   */
-  saveTask(taskList) {
-    if (this === null) { return }
-    
-    // Check if task already exists.
-    // If so, update details.
-    // Otherwise add it to tasks array.
-    const taskIndex = this.getMatchingTaskIndex(taskList);
-    if (taskIndex > -1) {
-      console.log("Saving task detail for existing task: ");
-      console.log(this);
-      this.updateTask(taskIndex, taskList);
-    } else {
-      console.log("Saving task detail for new task: ");
-      console.log(this);
-      taskList.push(this);
-    }
-  
-    schedule(taskList);
-  
-    // Update task list on screen and update local storage
-    renderTaskList(taskList);
-    this.saveToLocalStorage(taskList);
-  
-  }
-  
-  updateTask(taskIndex, taskList) {
-    // Update task details
-    taskList[taskIndex] = this;
-    // Update localstorage
-    this.saveToLocalStorage(taskList);
-  }
 
-  saveToLocalStorage(taskList) {
-    // convert the array to string then store it.
-    localStorage.setItem('tasks', JSON.stringify(taskList));
-  }
-
-  // Deletes the task from tasks array,
-  // then updates localstorage 
-  // and renders updated list to screen
-  deleteTask() {
-    id = this.id;
-    // filters out the <li> with the id and updates the tasks array
-    TASKS = TASKS.filter(function() {
-      // Use != not !==, because here types are different:
-      // number vs. string.
-      return this.id != id;
-    });
-  
-    // update the localStorage
-    saveToLocalStorage(TASKS);
-    // render them to screen
-    renderTaskList(TASKS);
+  // toggle the value to completed and not completed
+  toggleChecked() {
+    // toggle the value
+    this.completed = !this.completed;
   }
 }
-
-
-

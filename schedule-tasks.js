@@ -1,10 +1,18 @@
-import { formatDatetimeForTaskList } from './datetimeFormat.js'
+import { formatDatetimeForTaskArray } from './datetime-format.js'
 
 // It now assigns 1 task per time slot over the next 14 days. remaining tasks have a null workTimePlanned value
 
 // NEXT UP:
 // I think the most important thing is to have a visual representation
 // so let's get a calendar view of the task list (weekly view).
+// Here's where I landed after looking through a TON of options and posting on /r/learnjavascript:
+// Use vanilla JS.
+// Start with https://codepen.io/alvarotrigo/pen/KKQzvdr.
+// Followed by https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API.
+// And if relevant, throw in https://stackoverflow.com/questions/41745072/how-to-create-a-resizable-rectangle-in-javascript.
+//
+// Got the calendar drawing tasks correctly!
+//
 // To assign the tasks, look for the first task in the list
 // with minimum block size that is less than or equal to the slot size.
 // For now minBlockSize can just be estTimeTillFinished
@@ -19,9 +27,6 @@ import { formatDatetimeForTaskList } from './datetimeFormat.js'
 
 // At some point I should probably break up parents into children. Then give each child a (less important) due date, which is based on the parent due date but distributed between the days between now and the parent due date. There should probably be a universal maxBlockSize, which is 3 hours or something. So the child blocks would have a size of 3h unless broken up to fit in before their child due date.
 // Example: parent: 9h long, due in 3 days. childA: 3h, due tomorrow, childB: 3h, due in 2 days, childC: 3h, due date matching parent. We could also space it out if needed. For example, if parent: 9h, due in 18 days, then childA: 3h, due in 6 days, childB: 3h, due in 12 days, and childC: 3h, due date matching parent.
-
-
-// import { formatDatetimeForTaskList } from './datetimeFormat.js';
 
 
 const SCHEDULE_DISTANCE_DEFAULT = 14
@@ -56,7 +61,10 @@ function prioritize(tasks) {
 
 export function schedule(tasks) {
   tasks = prioritize(tasks);
-  let currDateTime = getNextDate(new Date())
+  let currDateTime = new Date();
+  // Set currDateTime to yesterday's "next date"
+  // In the future just use the current datetime
+  currDateTime = getNextDate(new Date(currDateTime.setDate(currDateTime.getDate() - 1)));
 
   for (let i = 0; i < tasks.length; i++) {
     const currTask = tasks[i];
@@ -122,14 +130,14 @@ function compare(taskA, taskB) {
 }
 
 
-function logTopThree(taskList) {
+function logTopThree(taskArray) {
   console.log(`Top 3 tasks:`);
-  taskList.slice(0, 3).forEach((task) => {
+  taskArray.slice(0, 3).forEach((task) => {
     const nameHtml = task.name ? (`${task.name}.`) : ('');
     const startDateTimeHtml = task.startDateTime ?
-      (`Start: ${formatDatetimeForTaskList(task.startDateTime)}`) : ('');
+      (`Start: ${formatDatetimeForTaskArray(task.startDateTime)}`) : ('');
     const dueDateTimeHtml = task.dueDateTime ?
-      (`Due: ${formatDatetimeForTaskList(task.dueDateTime)}`) : ('');
+      (`Due: ${formatDatetimeForTaskArray(task.dueDateTime)}`) : ('');
     // console.log(`Task ${nameHtml} ${startDateTimeHtml}. ${dueDateTimeHtml}.`);
   });
 }
