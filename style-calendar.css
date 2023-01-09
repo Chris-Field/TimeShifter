@@ -1,7 +1,7 @@
 /************************** calendar **************************/
 :root {
   --numDays: 7;
-  --numHours: 14;
+  --numHours: 15;
   --timeHeight: 15px;
   --calBgColor: #fff1f8;
   --eventBorderColor: #f2d3d8;

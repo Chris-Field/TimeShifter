@@ -11,11 +11,7 @@ import { formatDatetimeForTaskArray } from './datetime-format.js'
 // Followed by https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API.
 // And if relevant, throw in https://stackoverflow.com/questions/41745072/how-to-create-a-resizable-rectangle-in-javascript.
 //
-// Got the calendar drawing tasks,
-// just need to customize it to put the tasks in the right spots
-// and have the right 'span', based on workTimePlanned.
-// I also need to update the days to include weekends
-// and to have the correct dates displayed.
+// Got the calendar drawing tasks correctly!
 //
 // To assign the tasks, look for the first task in the list
 // with minimum block size that is less than or equal to the slot size.
@@ -65,7 +61,10 @@ function prioritize(tasks) {
 
 export function schedule(tasks) {
   tasks = prioritize(tasks);
-  let currDateTime = getNextDate(new Date())
+  let currDateTime = new Date();
+  // Set currDateTime to yesterday's "next date"
+  // In the future just use the current datetime
+  currDateTime = getNextDate(new Date(currDateTime.setDate(currDateTime.getDate() - 1)));
 
   for (let i = 0; i < tasks.length; i++) {
     const currTask = tasks[i];

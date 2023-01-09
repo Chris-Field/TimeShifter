@@ -1,14 +1,7 @@
 import { Task } from './task.js'
 import { formatDatetimeForTaskArray } from './datetime-format.js';
 import { schedule } from './schedule-tasks.js';
-
-
-export function saveTaskArray(taskArray, taskListHtml) {
-  // update the localStorage
-  saveToLocalStorage(taskArray);
-  // render them to screen
-  renderTaskArray(taskArray, taskListHtml);
-}
+import { clearCalendarEvents, drawEventOnCalendar } from './calendar.js';
 
 
 export function loadTaskArray() {
@@ -39,7 +32,14 @@ export function loadTaskArray() {
 }
 
 
+export function saveTaskArray(taskArray, taskListHtml) {
+  // update the localStorage
+  saveToLocalStorage(taskArray);
+}
+
+
 function saveToLocalStorage(taskArray) {
+  console.log('Saving to local storage the current list of tasks...')
   // convert the array to string then store it.
   localStorage.setItem('tasks', JSON.stringify(taskArray));
 }
@@ -54,20 +54,52 @@ function loadFromDatabase() {
 }
 
 
+/**
+ * Save the task details in main task array
+ * @param {object} task - The task to save
+ * @param {array} taskArray - Full list of all tasks
+ * @param {array} taskListHtml - HTML code of the visual task list
+ */
+export function updateTaskInArray(task, taskArray, taskListHtml) {
+  if (task === null) { return }
+  // Check if task already exists.
+  // If so, update details.
+  // Otherwise add it to tasks array.
+  const taskIndex = task.getMatchingTaskIndex(taskArray);
+  if (taskIndex > -1) {
+    console.log("Saving task detail for existing task: ");
+    console.log(task);
+    // Update task details
+    taskArray[taskIndex] = task;
+  } else {
+    console.log("Saving task detail for new task: ");
+    console.log(task);
+    taskArray.push(task);
+  }
+
+  saveChanges(taskArray, taskListHtml)
+}
+
+
 // Deletes the task from tasks array,
-// then updates localstorage 
+// then reschedules the tasks, updates localstorage,
 // and renders updated list to screen
-export function deleteTask(taskToDelete, taskArray, taskListHtml) {
-  // filters out the <li> with the id and updates the tasks array
-  taskArray = taskArray.filter(function(comparisonTask) {
+export function deleteTaskFromArray(taskToDelete, taskArray, taskListHtml) {
+  taskArray.splice(0, taskArray.length, ...taskArray.filter(function (comparisonTask) {
     // Use != not !==, because here types are different:
     // number vs. string.
     return comparisonTask.id != taskToDelete.id;
-  });
+  }));
 
-  saveTaskArray(taskArray, taskListHtml)
+  saveChanges(taskArray, taskListHtml);
 }
 
+// Run this after making any change to the task array
+function saveChanges(tasks, taskListHtml) {
+  schedule(tasks);
+  saveTaskArray(tasks, taskListHtml);
+  renderTasks(tasks, taskListHtml);
+}
 
 export function findTaskById(id, taskArray) {
   for (let task of taskArray) {
@@ -80,15 +112,23 @@ export function findTaskById(id, taskArray) {
   throw `Task ${id} could not be found in array`
 }
 
-
-function renderTaskArray(taskArray, taskListHtml) {
+/**
+ * Update the screen to reflect the current task list, in both the list and the calendar.
+ * @param {array} taskArray 
+ * @param {HTMLElement} taskListHtml 
+ */
+export function renderTasks(taskArray, taskListHtml) {
   // Clear everything inside <ul> with class=task-list
   taskListHtml.innerHTML = '';
+  // Clear all the event <div>'s in the calendar
+  clearCalendarEvents();
 
-  // Run through each task inside taskArray
+  console.log('Rendering tasks on screen...')
+  // Add each task inside taskArray to the screen
   for (let task of taskArray) {
     let taskHtmlLi = generateTaskHtmlLi(task);
     taskListHtml.append(taskHtmlLi);
+    drawEventOnCalendar(task);
   };
 }
 
@@ -146,32 +186,3 @@ function generateTaskHtmlLi(task) {
 
   return li
 }
-
-
-/**
- * Save the task details in main task array
- * @param {object} task - The task to save
- * @param {array} taskArray - Full list of all tasks
- * @param {array} taskListHtml - HTML code of the visual task list
- */
-export function updateTaskInArray(task, taskArray, taskListHtml) {
-  if (task === null) { return }
-  // Check if task already exists.
-  // If so, update details.
-  // Otherwise add it to tasks array.
-  const taskIndex = task.getMatchingTaskIndex(taskArray);
-  if (taskIndex > -1) {
-    console.log("Saving task detail for existing task: ");
-    console.log(task);
-    // Update task details
-    taskArray[taskIndex] = task;
-  } else {
-    console.log("Saving task detail for new task: ");
-    console.log(task);
-    taskArray.push(task);
-  }
-
-  schedule(taskArray);
-
-  saveTaskArray(taskArray, taskListHtml)
-};

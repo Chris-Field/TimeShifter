@@ -3,8 +3,8 @@ import {
   zeroPaddedtime
 } from './datetime-format.js';
 import { Task } from './task.js';
-import { deleteTask, findTaskById, loadTaskArray, saveTaskArray, updateTaskInArray } from './task-array.js';
-import { assignDatesToCalendarDays, drawEventsOnCalendar, updateCalendarDayNames, updateCalendarDayNumbers } from './calendar.js'
+import { deleteTaskFromArray, findTaskById, loadTaskArray, renderTasks, saveTaskArray, updateTaskInArray } from './task-array.js';
+import { updateCalendarDayNames, updateCalendarDayNumbers } from './calendar.js'
 
 /////////////////////// TO DO ////////////////////////////////
 // notes in scheduleTasks.js
@@ -28,11 +28,15 @@ const taskListHtml = document.querySelector('.task-list');
 // Default the task form as hidden
 hideTaskForm();
 
+// Order the days of the week on the calendar based on user preference
+updateCalendarDayNames();
+// Set the calendar dates
+updateCalendarDayNumbers();
 
 // initially get everything from localStorage
 const taskArray = loadTaskArray();
 // And render it to the screen
-saveTaskArray(taskArray, taskListHtml);
+renderTasks(taskArray, taskListHtml);
 
 
 // After that addEventListener <ul> with class=taskArray.
@@ -48,11 +52,12 @@ taskListHtml.addEventListener('click', function (event) {
     // toggle the state
     task.toggleChecked();
     saveTaskArray(taskArray, taskListHtml);
+    renderTasks(taskArray, taskListHtml)
   }
 
   // check if that is a delete-button
   else if (event.target.classList.contains('delete-button')) {
-    deleteTask(task, taskArray, taskListHtml);
+    deleteTaskFromArray(task, taskArray, taskListHtml);
   }
 
   // Otherwise open the task detail window
@@ -106,15 +111,6 @@ taskForm.addEventListener('click', (event) => {
   showHideDateTimeInputFields(selection.id);
 
 });
-
-// Set the calendar dates
-assignDatesToCalendarDays();
-// Order the days of the week based on user preference
-updateCalendarDayNames();
-// Set the date numbers on the calendar
-updateCalendarDayNumbers();
-// Draw the calendar
-drawEventsOnCalendar(taskArray);
 
 function hideDateTimeInputFields() {
   const dueDateTime = document.querySelector('.task-due');

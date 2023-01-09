@@ -1,18 +1,18 @@
 /** 
- * @param {object} [taskDetails] - The details desired to apply to the task
- * @param {number} [taskDetails.id]
- * @param {string} [taskDetails.name]
- * @param {Date} [taskDetails.startDateTime]
- * @param {Date} [taskDetails.dueDateTime]
- * @param {string} [taskDetails.urgency]
- * @param {string} [taskDetails.estTimeTillFinished]
- * @param {string} [taskDetails.shift]
- * @param {boolean} [taskDetails.recurring]
- * @param {number} [taskDetails.assignee]
- * @param {object} [taskDetails.notes]
- * @param {boolean} [taskDetails.completed]
- * @param {object} [taskDetails.workTimePlanned]
- * @param {number} [taskDetails.parent]
+ * @property {object} [taskDetails] - The details desired to apply to the task
+ * @property {number} [taskDetails.id]
+ * @property {string} [taskDetails.name]
+ * @property {Date} [taskDetails.startDateTime]
+ * @property {Date} [taskDetails.dueDateTime]
+ * @property {string} [taskDetails.urgency]
+ * @property {string} [taskDetails.estTimeTillFinished]
+ * @property {string} [taskDetails.shift]
+ * @property {boolean} [taskDetails.recurring]
+ * @property {number} [taskDetails.assignee]
+ * @property {object} [taskDetails.notes]
+ * @property {boolean} [taskDetails.completed]
+ * @property {object} [taskDetails.workTimePlanned]
+ * @property {number} [taskDetails.parent]
 */
 export class Task {
   constructor(taskDetails) {
@@ -36,19 +36,16 @@ export class Task {
     this.parent = taskDetails.parent ? taskDetails.parent : null;
   };
 
-  
+
   getMatchingTaskIndex(taskArray) {
     const taskIndexInArray = taskArray.findIndex(element => element.id == this.id);
     return taskIndexInArray;
   }
 
-  
+
   // toggle the value to completed and not completed
   toggleChecked() {
     // toggle the value
     this.completed = !this.completed;
   }
 }
-
-
-
