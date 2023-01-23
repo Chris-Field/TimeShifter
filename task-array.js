@@ -166,12 +166,10 @@ function generateTaskHtmlLi(task) {
   const workTimePlannedHtml = task.workTimePlanned ? (`Planned work time: ${formatDatetimeForTaskArray(task.workTimePlanned['startDateTime'])}-${task.workTimePlanned['endDateTime'].getHours()}:${task.workTimePlanned['endDateTime'].getMinutes()}.`) : ('');
   const parentHtml = task.parent ? (`${task.parent}.`) : ('');
 
-  li.innerHTML = `
+
+  /*Removed HTML. Probably need to add to li as attributes (see li.setAttribute above)
     <input type="checkbox" class="checkbox" ${checked}>
-    <a href="#">
-      <span class="task-list-name">${nameHtml}</span>
       <span class="task-list-start-date">${startDateTimeHtml}</span>
-      <span class="task-list-due-date">${dueDateTimeHtml}</span>
       <span class="task-list-urgency">${urgencyHtml}</span>
       <span class="task-list-est-time-till-finished">${estimatedTimeHtml}</span>
       <span class="task-list-shift">${shiftHtml}</span>
@@ -180,8 +178,14 @@ function generateTaskHtmlLi(task) {
       <span class="task-list-notes">${notesHtml}</span>
       <span class="task-list-work-time-planned">${workTimePlannedHtml}</span>
       <span class="task-list-parent">${parentHtml}</span>
-    </a>
     <button class="delete-button">X</button>
+  */
+
+  li.innerHTML = `
+    <a href="#">
+      <span class="task-list-name">${nameHtml}</span>
+      <span class="task-list-due-date">${dueDateTimeHtml}</span>
+    </a>
  `;
 
   return li
