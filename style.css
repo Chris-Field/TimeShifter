@@ -10,22 +10,25 @@ CSS Grid: https://www.reddit.com/r/webdev/comments/uxrhf4/css_grid_summarized_in
 
 
 /************************** common styles **************************/
+:root {
+  --sidebarWidth: 250px;
+}
+
 * {
   padding: 0;
   margin: 0;
 }
 
 body {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
   background: linear-gradient(170deg, #F00000, #bd006e);
   font-family: system-ui, sans-serif;
 }
 
 ul {
-  list-style-type: none; /* get rid of bullet points on side of list items */
+  list-style-type: none;
+  /* get rid of bullet points on side of list items */
 }
 
 /************************** common style ends **************************/
@@ -94,39 +97,101 @@ ul {
 
 /************************** task-detail style ends **************************/
 
-/************************** container **************************/
-.container {
-  min-width: 700px;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+/************************** header styles **************************/
+header {
+  position: fixed;
+  display: flex;
+  margin-right: 0;
+  padding: 0.5em 1.5em 0 1.5em;
+  justify-content: flex-end;
 }
 
 h1 {
   color: #fff;
   font-size: 3rem;
+  margin-left: var(--sidebarWidth);
+  margin-right: auto;
+}
+
+.new-task-button {
+  margin-left: 1em;
+}
+
+/************************** header style ends **************************/
+
+/************************** main **************************/
+.main {
+  min-width: 700px;
+  padding: 3em 1.5em 0 calc(1em + var(--sidebarWidth));
 }
 
 /************************** task-list **************************/
 .task-list {
-  min-width: 350px;
+  height: 100vh;
+  top: 0;
+  bottom: 1em;
+  /* padding-bottom: 1em; */
+  overflow-y: scroll;
+  width: var(--sidebarWidth);
+  overflow-y: scroll;
+  mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+  mask-size: 100% 20000px;
+  mask-position: left bottom;
+  -webkit-mask-image: linear-gradient(to top, transparent, black),
+    linear-gradient(to left, transparent 17px, black 17px);
+  -webkit-mask-size: 100% 20000px;
+  -webkit-mask-position: left bottom;
+  transition: mask-position 0.3s, -webkit-mask-position 0.3s;
 }
 
-/* each li with class="task" */
-.task {
+.task-list:hover {
+  -webkit-mask-position: left top;
+  mask-position: left top;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lightgray;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #BEBEBE;
+}
+
+/* @keyframes background {
+  from {
+    background: pink;
+  }
+
+  to {
+    background: #c0d6ff;
+  }
+} */
+
+.sidebar {
+  position: fixed;
+  padding: 0 5px 0 0;
   background-color: #fff;
-  padding: 10px;
+  float: left;
+  /* animation: background 5s infinite alternate; */
+}
+
+.task {
+  padding: 0.75em 0.3em 0 1em;
   font-size: 1.1rem;
-}
-
-.task:first-child {
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
-}
-
-.task:last-child {
-  border-bottom-left-radius: 7px;
-  border-bottom-right-radius: 7px;
 }
 
 .checkbox {
@@ -146,10 +211,10 @@ h1 {
 }
 
 /* applied when the task item is checked */
-.checked { 
+.checked {
   text-decoration: line-through;
 }
 
 /************************** task-list style ends **************************/
 
-/************************** container style ends **************************/
+/************************** main style ends **************************/
