@@ -9,6 +9,9 @@ export function clearCalendarEvents() {
 * Draw the event on the calendar.
 */
 export function drawEventOnCalendar(task, numHours = 15, dayStartTime = 8, chunksPerHour = 4) {
+  if (!task.workTimePlanned) {
+    return;
+  }
   console.log(`Drawing task ${task.name} at ${task.workTimePlanned.startDateTime.toISOString()}`);
 
   // Construct the div that holds the event
