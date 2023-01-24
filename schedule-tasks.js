@@ -12,6 +12,8 @@ import { formatDatetimeForTaskArray } from './datetime-format.js'
 // And if relevant, throw in https://stackoverflow.com/questions/41745072/how-to-create-a-resizable-rectangle-in-javascript.
 //
 // Got the calendar drawing tasks correctly!
+// NEED TO CREATE A NEW BRANCH BEFORE MAKING CHANGES.
+// POSSIBLY FOCUS A BIT ON VISUAL CHANGES, LIKE PUTTING THE TASKS ON THE LEFT OR RIGHT SIDE
 //
 // To assign the tasks, look for the first task in the list
 // with minimum block size that is less than or equal to the slot size.
