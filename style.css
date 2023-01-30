@@ -33,6 +33,29 @@ ul {
 
 /************************** common style ends **************************/
 
+/************************** header styles **************************/
+header {
+  position: fixed;
+  width: 100%;
+  background: gray;
+  text-align: right;
+  line-height: 4em;
+}
+
+h1 {
+  color: #fff;
+  font-size: 3rem;
+  float: left;
+  margin-left: 16px;
+}
+
+.new-task-button {
+  margin-right: 16px;
+}
+
+
+/************************** header style ends **************************/
+
 /************************** task-detail **************************/
 
 .task-detail-popup {
@@ -97,28 +120,6 @@ ul {
 
 /************************** task-detail style ends **************************/
 
-/************************** header styles **************************/
-header {
-  position: fixed;
-  display: flex;
-  margin-right: 0;
-  padding: 0.5em 1.5em 0 1.5em;
-  justify-content: flex-end;
-}
-
-h1 {
-  color: #fff;
-  font-size: 3rem;
-  margin-left: var(--sidebarWidth);
-  margin-right: auto;
-}
-
-.new-task-button {
-  margin-left: 1em;
-}
-
-/************************** header style ends **************************/
-
 /************************** main **************************/
 .main {
   min-width: 700px;
@@ -126,20 +127,26 @@ h1 {
 }
 
 /************************** task-list **************************/
+.sidebar {
+  position: fixed;
+  padding: 0 5px 0 0;
+  background-color: #fff;
+  float: left;
+  top: 4em;
+}
+
 .task-list {
-  height: 100vh;
-  top: 0;
-  bottom: 1em;
-  /* padding-bottom: 1em; */
+  height: calc(100vh - 4em - 1em);
+  padding-bottom: 1em;
   overflow-y: scroll;
   width: var(--sidebarWidth);
   overflow-y: scroll;
   mask-image: linear-gradient(to top, transparent, black),
-    linear-gradient(to left, transparent 17px, black 17px);
+  linear-gradient(to left, transparent 17px, black 17px);
   mask-size: 100% 20000px;
   mask-position: left bottom;
   -webkit-mask-image: linear-gradient(to top, transparent, black),
-    linear-gradient(to left, transparent 17px, black 17px);
+  linear-gradient(to left, transparent 17px, black 17px);
   -webkit-mask-size: 100% 20000px;
   -webkit-mask-position: left bottom;
   transition: mask-position 0.3s, -webkit-mask-position 0.3s;
@@ -180,14 +187,6 @@ h1 {
     background: #c0d6ff;
   }
 } */
-
-.sidebar {
-  position: fixed;
-  padding: 0 5px 0 0;
-  background-color: #fff;
-  float: left;
-  /* animation: background 5s infinite alternate; */
-}
 
 .task {
   padding: 0.75em 0.3em 0 1em;
