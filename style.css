@@ -6,12 +6,23 @@ Buttons: https://www.reddit.com/r/webdev/comments/uq104d/100_css_buttons_code_in
 Flexbox: https://www.reddit.com/r/webdev/comments/usln38/a_visual_reference_of_css_flexbox/
 
 CSS Grid: https://www.reddit.com/r/webdev/comments/uxrhf4/css_grid_summarized_in_one_image/
+
+Theme: https://coolors.co/44355b-31263e-221e22-eca72c-ee5622
 ************************** Reference Links Ends **************************/
 
 
 /************************** common styles **************************/
 :root {
   --sidebarWidth: 250px;
+  --numDays: 7;
+  --numHours: 15;
+  --timeHeight: 15px;
+  --bgColorPrimary: #221E22;
+  --fgColorPrimary: #ECA72C;
+  --bgColorSecondary: #31263E;
+  --fgColorSecondary: white;
+  --bgColorTertiary: #44355B;
+  --fgColorTtertiary: #EE5622;
 }
 
 * {
@@ -22,13 +33,13 @@ CSS Grid: https://www.reddit.com/r/webdev/comments/uxrhf4/css_grid_summarized_in
 body {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(170deg, #F00000, #bd006e);
+  background: linear-gradient(170deg, #ECA72C, #EE5622);
   font-family: system-ui, sans-serif;
 }
 
 ul {
   list-style-type: none;
-  /* get rid of bullet points on side of list items */
+  color: white;
 }
 
 /************************** common style ends **************************/
@@ -37,13 +48,13 @@ ul {
 header {
   position: fixed;
   width: 100%;
-  background: gray;
+  background: #31263E;
   text-align: right;
   line-height: 4em;
 }
 
 h1 {
-  color: #fff;
+  color: white;
   font-size: 3rem;
   float: left;
   margin-left: 16px;
@@ -65,7 +76,7 @@ h1 {
   top: 20%;
   align-items: center;
   padding: 20px;
-  background: #dbdbdb;
+  background: #221E22;
   border-radius: 5px;
   border: 1px solid #bbb;
 }
@@ -89,7 +100,7 @@ h1 {
 }
 
 .save-button {
-  background-color: #0000ff;
+  background-color: #EE5622;
   color: #fff;
   border: none;
   outline: none;
@@ -100,7 +111,7 @@ h1 {
 
 .save-button:hover {
   cursor: pointer;
-  background-color: #73E831;
+  background-color: #ECA72C;
 }
 
 .cancel-button {
@@ -115,7 +126,7 @@ h1 {
 
 .cancel-button:hover {
   cursor: pointer;
-  background-color: #ff0000;
+  background-color: #44355B;
 }
 
 /************************** task-detail style ends **************************/
@@ -130,7 +141,7 @@ h1 {
 .sidebar {
   position: fixed;
   padding: 0 5px 0 0;
-  background-color: #fff;
+  background-color: #221E22;
   float: left;
   top: 4em;
 }
@@ -142,11 +153,11 @@ h1 {
   width: var(--sidebarWidth);
   overflow-y: scroll;
   mask-image: linear-gradient(to top, transparent, black),
-  linear-gradient(to left, transparent 17px, black 17px);
+    linear-gradient(to left, transparent 17px, black 17px);
   mask-size: 100% 20000px;
   mask-position: left bottom;
   -webkit-mask-image: linear-gradient(to top, transparent, black),
-  linear-gradient(to left, transparent 17px, black 17px);
+    linear-gradient(to left, transparent 17px, black 17px);
   -webkit-mask-size: 100% 20000px;
   -webkit-mask-position: left bottom;
   transition: mask-position 0.3s, -webkit-mask-position 0.3s;
@@ -169,13 +180,13 @@ h1 {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: lightgray;
+  /* background: lightgray; */
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #BEBEBE;
+  background: #31263E;
 }
 
 /* @keyframes background {
@@ -201,20 +212,16 @@ h1 {
   font-weight: 400;
 }
 
-.checkbox {
-  margin-right: 10px;
+.task a {
+  color: var(--);
 }
 
-.delete-button {
-  float: right;
-  background-color: #dc143c;
-  border: none;
-  outline: none;
-  border-radius: 7px;
-  padding: 2px 5px;
-  margin-left: 10px;
-  font-size: 1.1rem;
-  font-weight: 550;
+.task a:visited {
+  color: coral
+}
+
+.checkbox {
+  margin-right: 10px;
 }
 
 /* applied when the task item is checked */

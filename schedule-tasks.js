@@ -11,6 +11,7 @@ import { formatDatetimeForTaskArray } from './datetime-format.js'
 // Followed by https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API.
 // And if relevant, throw in https://stackoverflow.com/questions/41745072/how-to-create-a-resizable-rectangle-in-javascript.
 //
+// Add border between calendar days. Make the yellow color more marigold. Less of a fade. Perhaps replace the yellow background with something darker.
 //
 // To assign the tasks, look for the first task in the list
 // with minimum block size that is less than or equal to the slot size.

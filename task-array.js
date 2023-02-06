@@ -206,7 +206,6 @@ function generateTaskItemHtmlLi(task) {
       <span class="task-list-notes">${notesHtml}</span>
       <span class="task-list-work-time-planned">${workTimePlannedHtml}</span>
       <span class="task-list-parent">${parentHtml}</span>
-    <button class="delete-button">X</button>
   */
 
   li.innerHTML = `
