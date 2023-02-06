@@ -188,9 +188,17 @@ h1 {
   }
 } */
 
+.task-group {
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+  margin: 1em 0 0 0;
+  padding-left: 0.5em
+}
+
 .task {
-  padding: 0.75em 0.3em 0 1em;
+  padding: 0em 0.25em 0.25em .5em;
   font-size: 1.1rem;
+  font-weight: 400;
 }
 
 .checkbox {

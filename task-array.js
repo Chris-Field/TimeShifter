@@ -1,5 +1,5 @@
 import { Task } from './task.js'
-import { formatDatetimeForTaskArray } from './datetime-format.js';
+import { formatDatetimeForTaskArray, zeroPaddedDate } from './datetime-format.js';
 import { schedule } from './schedule-tasks.js';
 import { clearCalendarEvents, drawEventOnCalendar } from './calendar.js';
 
@@ -124,16 +124,44 @@ export function renderTasks(taskArray, taskListHtml) {
   clearCalendarEvents();
 
   console.log('Rendering tasks on screen...')
+  let currWtPlanned;
+  const dueDateGroups = { Later: [] };
   // Add each task inside taskArray to the screen
-  for (let task of taskArray) {
-    let taskHtmlLi = generateTaskHtmlLi(task);
-    taskListHtml.append(taskHtmlLi);
-    drawEventOnCalendar(task);
+  for (const task of taskArray) {
+    if (!task.workTimePlanned) {
+      dueDateGroups.Later.push(task);
+      continue;
+    }
+    currWtPlanned = zeroPaddedDate(task.workTimePlanned.startDateTime);
+    if (!Object.keys(dueDateGroups).includes(currWtPlanned)) {
+      dueDateGroups[currWtPlanned] = [task]
+    } else {
+      dueDateGroups[currWtPlanned].push(task)
+    }
   };
+
+  for (const group in dueDateGroups) {
+    let groupHtmlLi = generateTaskGroupHtmlLi(group);
+    for (const task of dueDateGroups[group]) {
+      let taskHtmlLi = generateTaskItemHtmlLi(task);
+      groupHtmlLi.append(taskHtmlLi);
+      drawEventOnCalendar(task);
+    }
+    taskListHtml.append(groupHtmlLi);
+  }
 }
 
 
-function generateTaskHtmlLi(task) {
+function generateTaskGroupHtmlLi(groupName) {
+  // Example: <li class="task-group">${groupName}</li>
+  const li = document.createElement('li');
+  li.setAttribute('class', 'task-group');
+  li.innerHTML = `${groupName}`;
+  return li
+}
+
+
+function generateTaskItemHtmlLi(task) {
   // check if the task is completed
   const checked = task.completed ? 'checked' : null;
 
