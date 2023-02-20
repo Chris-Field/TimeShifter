@@ -7,7 +7,9 @@ Flexbox: https://www.reddit.com/r/webdev/comments/usln38/a_visual_reference_of_c
 
 CSS Grid: https://www.reddit.com/r/webdev/comments/uxrhf4/css_grid_summarized_in_one_image/
 
-Theme: https://coolors.co/44355b-31263e-221e22-eca72c-ee5622
+Theme: https://coolors.co/cededd-3e505b-213134-03110d
+
+Logo: https://looka.com/editor/111712891
 ************************** Reference Links Ends **************************/
 
 
@@ -71,12 +73,29 @@ header {
 
 /************************** task-detail **************************/
 
+.overlay {
+  position:fixed;
+  display:none; 
+
+  /* color with alpha channel */
+  background-color: rgba(0, 0, 0, 0.7); /* 0.7 = 70% opacity */
+
+  /* stretch to screen edges */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
 .task-detail-popup {
   display: none;
   position: absolute;
-  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
   top: 20%;
-  align-items: center;
+  width: 800px;
+  height: fit-content;
+  text-align: center;
   padding: 20px;
   background: var(--bgColorSecondary);
   border-radius: 5px;
@@ -99,6 +118,11 @@ header {
 
 .task-detail .hidden {
   display: none;
+}
+
+#editor {
+  max-height: 400px;
+  overflow: scroll;
 }
 
 .save-button {
@@ -201,17 +225,15 @@ header {
 }
 
 .task {
+  color: var(--fgColorTertiary);
   padding: 0em 0.25em 0.25em .5em;
   font-size: 1.1rem;
   font-weight: 400;
+  cursor: pointer;
 }
 
-.task a {
-  color: var(--fgColorTertiary);
-}
-
-.task a:visited {
-  color: var(--fgColorTertiary)
+.task:hover {
+  background-color: var(--bgColorTertiary);
 }
 
 .checkbox {

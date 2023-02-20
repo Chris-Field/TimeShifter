@@ -209,10 +209,8 @@ function generateTaskItemHtmlLi(task) {
   */
 
   li.innerHTML = `
-    <a href="#">
-      <span class="task-list-name">${nameHtml}</span>
-      <span class="task-list-due-date">${dueDateTimeHtml}</span>
-    </a>
+    <span class="task-list-name">${nameHtml}</span>
+    <span class="task-list-due-date">${dueDateTimeHtml}</span>
  `;
 
   return li
