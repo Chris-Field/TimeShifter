@@ -40,7 +40,6 @@ renderTasks(taskArray, taskListHtml);
 
 
 // After that addEventListener <ul> with class=taskArray.
-// Because we need to listen for click event in all delete-button and checkbox
 taskListHtml.addEventListener('click', function (event) {
   // get id from data-key attribute's value of parent <li>
   const parentLi = event.target.closest('li');
@@ -53,11 +52,6 @@ taskListHtml.addEventListener('click', function (event) {
     task.toggleChecked();
     saveTaskArray(taskArray, taskListHtml);
     renderTasks(taskArray, taskListHtml)
-  }
-
-  // check if that is a delete-button
-  else if (event.target.classList.contains('delete-button')) {
-    deleteTaskFromArray(task, taskArray, taskListHtml);
   }
 
   // Otherwise open the task detail window

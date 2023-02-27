@@ -6,42 +6,100 @@ Buttons: https://www.reddit.com/r/webdev/comments/uq104d/100_css_buttons_code_in
 Flexbox: https://www.reddit.com/r/webdev/comments/usln38/a_visual_reference_of_css_flexbox/
 
 CSS Grid: https://www.reddit.com/r/webdev/comments/uxrhf4/css_grid_summarized_in_one_image/
+
+Theme: https://coolors.co/cededd-3e505b-213134-03110d
+
+Logo: https://looka.com/editor/111712891
 ************************** Reference Links Ends **************************/
 
 
 /************************** common styles **************************/
+:root {
+  --sidebarWidth: 250px;
+  --numDays: 7;
+  --numHours: 15;
+  --timeHeight: 15px;
+  --bgColorPrimary: #03110D;
+  --fgColorPrimary: #AAC5C2;
+  --bgColorSecondary: #3E505B;
+  --fgColorSecondary: #000000;
+  --bgColorTertiary: #213134;
+  --fgColorTertiary: #FFFFFF;
+}
+
 * {
   padding: 0;
   margin: 0;
 }
 
 body {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  background: linear-gradient(170deg, #F00000, #bd006e);
+  background: var(--bgColorPrimary);
   font-family: system-ui, sans-serif;
+  color: var(--fgColorTertiary)
 }
 
 ul {
-  list-style-type: none; /* get rid of bullet points on side of list items */
+  list-style-type: none;
+  color: var(--fgColorSecondary);
 }
 
 /************************** common style ends **************************/
 
+/************************** header styles **************************/
+header {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  background: var(--bgColorTertiary);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  color: var(--fgColorSecondary);
+  font-size: 3rem;
+  float: left;
+  margin: 0;
+}
+
+.new-task-button {
+  margin-right: 16px;
+}
+
+
+/************************** header style ends **************************/
+
 /************************** task-detail **************************/
+
+.overlay {
+  position:fixed;
+  display:none; 
+
+  /* color with alpha channel */
+  background-color: rgba(0, 0, 0, 0.7); /* 0.7 = 70% opacity */
+
+  /* stretch to screen edges */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
 
 .task-detail-popup {
   display: none;
   position: absolute;
-  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
   top: 20%;
-  align-items: center;
+  width: 800px;
+  height: fit-content;
+  text-align: center;
   padding: 20px;
-  background: #dbdbdb;
+  background: var(--bgColorSecondary);
   border-radius: 5px;
-  border: 1px solid #bbb;
+  border: 1px solid var(--bgColorTertiary);
 }
 
 .task-detail {
@@ -62,9 +120,14 @@ ul {
   display: none;
 }
 
+#editor {
+  max-height: 400px;
+  overflow: scroll;
+}
+
 .save-button {
-  background-color: #0000ff;
-  color: #fff;
+  color: var(--fgColorPrimary);
+  background-color: var(--bgColorPrimary);
   border: none;
   outline: none;
   border-radius: 5px;
@@ -74,12 +137,13 @@ ul {
 
 .save-button:hover {
   cursor: pointer;
-  background-color: #73E831;
+  background-color: var(--fgColorTertiary);
+  color: var(--fgColorSecondary);
 }
 
 .cancel-button {
   background: none;
-  color: #4a4a4a;
+  color: var(--fgColorPrimary);
   border: none;
   outline: none;
   border-radius: 5px;
@@ -89,67 +153,98 @@ ul {
 
 .cancel-button:hover {
   cursor: pointer;
-  background-color: #ff0000;
+  background-color: var(--fgColorTertiary);
+  color: var(--fgColorSecondary);
 }
 
 /************************** task-detail style ends **************************/
 
-/************************** container **************************/
-.container {
+/************************** main **************************/
+.main {
   min-width: 700px;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-h1 {
-  color: #fff;
-  font-size: 3rem;
+  padding: 3em 1.5em 0 calc(1em + var(--sidebarWidth));
 }
 
 /************************** task-list **************************/
+.sidebar {
+  position: fixed;
+  padding: 0 5px 0 0;
+  background-color: var(--bgColorSecondary);
+  float: left;
+  top: 4em;
+}
+
 .task-list {
-  min-width: 350px;
+  height: calc(100vh - 4em - 1em);
+  padding-bottom: 1em;
+  overflow-y: scroll;
+  width: var(--sidebarWidth);
+  overflow-y: scroll;
+  mask-image: linear-gradient(to top, transparent, var(--bgColorPrimary)),
+    linear-gradient(to left, transparent 17px, var(--bgColorPrimary) 17px);
+  mask-size: 100% 20000px;
+  mask-position: left bottom;
+  -webkit-mask-image: linear-gradient(to top, transparent, var(--bgColorPrimary)),
+    linear-gradient(to left, transparent 17px, var(--bgColorPrimary) 17px);
+  -webkit-mask-size: 100% 20000px;
+  -webkit-mask-position: left bottom;
+  transition: mask-position 0.3s, -webkit-mask-position 0.3s;
 }
 
-/* each li with class="task" */
+.task-list:hover {
+  -webkit-mask-position: left top;
+  mask-position: left top;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /* background: lightgray; */
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bgColorPrimary);
+}
+
+.task-group {
+  font-weight: bold;
+  border-bottom: 1px solid var(--fgColorSecondary);
+  margin: 1em 0 0 0;
+  padding-left: 0.5em
+}
+
 .task {
-  background-color: #fff;
-  padding: 10px;
+  color: var(--fgColorTertiary);
+  padding: 0em 0.25em 0.25em .5em;
   font-size: 1.1rem;
+  font-weight: 400;
+  cursor: pointer;
 }
 
-.task:first-child {
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
-}
-
-.task:last-child {
-  border-bottom-left-radius: 7px;
-  border-bottom-right-radius: 7px;
+.task:hover {
+  background-color: var(--bgColorTertiary);
 }
 
 .checkbox {
   margin-right: 10px;
 }
 
-.delete-button {
-  float: right;
-  background-color: #dc143c;
-  border: none;
-  outline: none;
-  border-radius: 7px;
-  padding: 2px 5px;
-  margin-left: 10px;
-  font-size: 1.1rem;
-  font-weight: 550;
-}
-
 /* applied when the task item is checked */
-.checked { 
+.checked {
   text-decoration: line-through;
 }
 
 /************************** task-list style ends **************************/
 
-/************************** container style ends **************************/
+/************************** main style ends **************************/

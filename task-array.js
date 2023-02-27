@@ -1,5 +1,5 @@
 import { Task } from './task.js'
-import { formatDatetimeForTaskArray } from './datetime-format.js';
+import { formatDatetimeForTaskArray, zeroPaddedDate } from './datetime-format.js';
 import { schedule } from './schedule-tasks.js';
 import { clearCalendarEvents, drawEventOnCalendar } from './calendar.js';
 
@@ -124,16 +124,44 @@ export function renderTasks(taskArray, taskListHtml) {
   clearCalendarEvents();
 
   console.log('Rendering tasks on screen...')
+  let currWtPlanned;
+  const dueDateGroups = { Later: [] };
   // Add each task inside taskArray to the screen
-  for (let task of taskArray) {
-    let taskHtmlLi = generateTaskHtmlLi(task);
-    taskListHtml.append(taskHtmlLi);
-    drawEventOnCalendar(task);
+  for (const task of taskArray) {
+    if (!task.workTimePlanned) {
+      dueDateGroups.Later.push(task);
+      continue;
+    }
+    currWtPlanned = zeroPaddedDate(task.workTimePlanned.startDateTime);
+    if (!Object.keys(dueDateGroups).includes(currWtPlanned)) {
+      dueDateGroups[currWtPlanned] = [task]
+    } else {
+      dueDateGroups[currWtPlanned].push(task)
+    }
   };
+
+  for (const group in dueDateGroups) {
+    let groupHtmlLi = generateTaskGroupHtmlLi(group);
+    for (const task of dueDateGroups[group]) {
+      let taskHtmlLi = generateTaskItemHtmlLi(task);
+      groupHtmlLi.append(taskHtmlLi);
+      drawEventOnCalendar(task);
+    }
+    taskListHtml.append(groupHtmlLi);
+  }
 }
 
 
-function generateTaskHtmlLi(task) {
+function generateTaskGroupHtmlLi(groupName) {
+  // Example: <li class="task-group">${groupName}</li>
+  const li = document.createElement('li');
+  li.setAttribute('class', 'task-group');
+  li.innerHTML = `${groupName}`;
+  return li
+}
+
+
+function generateTaskItemHtmlLi(task) {
   // check if the task is completed
   const checked = task.completed ? 'checked' : null;
 
@@ -166,12 +194,10 @@ function generateTaskHtmlLi(task) {
   const workTimePlannedHtml = task.workTimePlanned ? (`Planned work time: ${formatDatetimeForTaskArray(task.workTimePlanned['startDateTime'])}-${task.workTimePlanned['endDateTime'].getHours()}:${task.workTimePlanned['endDateTime'].getMinutes()}.`) : ('');
   const parentHtml = task.parent ? (`${task.parent}.`) : ('');
 
-  li.innerHTML = `
+
+  /*Removed HTML. Probably need to add to li as attributes (see li.setAttribute above)
     <input type="checkbox" class="checkbox" ${checked}>
-    <a href="#">
-      <span class="task-list-name">${nameHtml}</span>
       <span class="task-list-start-date">${startDateTimeHtml}</span>
-      <span class="task-list-due-date">${dueDateTimeHtml}</span>
       <span class="task-list-urgency">${urgencyHtml}</span>
       <span class="task-list-est-time-till-finished">${estimatedTimeHtml}</span>
       <span class="task-list-shift">${shiftHtml}</span>
@@ -180,8 +206,11 @@ function generateTaskHtmlLi(task) {
       <span class="task-list-notes">${notesHtml}</span>
       <span class="task-list-work-time-planned">${workTimePlannedHtml}</span>
       <span class="task-list-parent">${parentHtml}</span>
-    </a>
-    <button class="delete-button">X</button>
+  */
+
+  li.innerHTML = `
+    <span class="task-list-name">${nameHtml}</span>
+    <span class="task-list-due-date">${dueDateTimeHtml}</span>
  `;
 
   return li

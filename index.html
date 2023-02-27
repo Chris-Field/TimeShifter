@@ -12,18 +12,17 @@
 
 <body>
 
-  <div class="container">
-    <h1>Tasks</h1>
+  <header>
+    <img class="logo" src="media/timeswitcher_logo_white_54h.png" alt="logo" />
     <input type="button" class="new-task-button" value="New Task">
+  </header>
 
+  <div class="sidebar">
     <ul class="task-list">
-      <!-- dummy item -->
-      <!-- <li class="item" data-key="1594003133171">
-        <input class="checkbox" type="checkbox">
-        Go to Gym
-        <button class="delete-button">X</button>
-      </li> -->
     </ul>
+  </div>
+
+  <div class="main">
 
     <div class="calendar">
       <div class="timeline">
@@ -100,6 +99,7 @@
   </div>
 
   <div class="task-detail-popup">
+    <div class="overlay"></div>
     <form class="task-detail">
 
       <input type="text" name="task-name" id="task-name" placeholder="Task name" required>
