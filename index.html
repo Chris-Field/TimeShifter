@@ -1,183 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <meta charset="UTF=8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="style-calendar.css" />
+    <title>TimeSwitcher</title>
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" type="text/css" href="style-calendar.css">
-  <title>task List</title>
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-</head>
+  <body>
+    <div id="root"></div>
 
-<body>
-
-  <header>
-    <img class="logo" src="media/timeswitcher_logo_white_54h.png" alt="logo" />
-    <input type="button" class="new-task-button" value="New Task">
-  </header>
-
-  <div class="sidebar">
-    <ul class="task-list">
-    </ul>
-  </div>
-
-  <div class="main">
-
-    <div class="calendar">
-      <div class="timeline">
-        <div class="spacer"></div>
-        <div class="time-marker">8 AM</div>
-        <div class="time-marker">9 AM</div>
-        <div class="time-marker">10 AM</div>
-        <div class="time-marker">11 AM</div>
-        <div class="time-marker">12 PM</div>
-        <div class="time-marker">1 PM</div>
-        <div class="time-marker">2 PM</div>
-        <div class="time-marker">3 PM</div>
-        <div class="time-marker">4 PM</div>
-        <div class="time-marker">5 PM</div>
-        <div class="time-marker">6 PM</div>
-        <div class="time-marker">7 PM</div>
-        <div class="time-marker">8 PM</div>
-        <div class="time-marker">9 PM</div>
-        <div class="time-marker">10 PM</div>
-      </div>
-      <div class="days">
-        <div class="day one">
-          <div class="date">
-            <p class="date-num"></p>
-            <p class="date-day"></p>
-          </div>
-          <div class="events"></div>
-        </div>
-        <div class="day two">
-          <div class="date">
-            <p class="date-num"></p>
-            <p class="date-day"></p>
-          </div>
-          <div class="events">
-          </div>
-        </div>
-        <div class="day three">
-          <div class="date">
-            <p class="date-num"></p>
-            <p class="date-day"></p>
-          </div>
-          <div class="events"></div>
-        </div>
-        <div class="day four">
-          <div class="date">
-            <p class="date-num"></p>
-            <p class="date-day"></p>
-          </div>
-          <div class="events"></div>
-        </div>
-        <div class="day five">
-          <div class="date">
-            <p class="date-num"></p>
-            <p class="date-day"></p>
-          </div>
-          <div class="events"></div>
-        </div>
-        <div class="day six">
-          <div class="date">
-            <p class="date-num"></p>
-            <p class="date-day"></p>
-          </div>
-          <div class="events"></div>
-        </div>
-        <div class="day seven">
-          <div class="date">
-            <p class="date-num"></p>
-            <p class="date-day"></p>
-          </div>
-          <div class="events"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="task-detail-popup">
-    <div class="overlay"></div>
-    <form class="task-detail">
-
-      <input type="text" name="task-name" id="task-name" placeholder="Task name" required>
-
-      <label for="task-est-time-till-finished">Estimated time till finished:</label>
-      <select name="task-est-time-till-finished" id="task-est-time-till-finished" required>
-        <option value="15m">15 min</option>
-        <option value="30m" selected>30 min</option>
-        <option value="1h">1 hour</option>
-        <option value="2h">2 hours</option>
-        <option value="4h">4 hours</option>
-      </select>
-
-      <div class="task-urgency">
-        <label class="task-urgency-button active">
-          <input type="radio" name="task-urgency" id="task-urgency-1"> ASAP
-        </label>
-        <label class="task-urgency-button">
-          <input type="radio" name="task-urgency" id="task-urgency-2"> Hard Deadline
-        </label>
-        <label class="task-urgency-button">
-          <input type="radio" name="task-urgency" id="task-urgency-3"> Soft Deadline
-        </label>
-        <label class="task-urgency-button">
-          <input type="radio" name="task-urgency" id="task-urgency-4"> No Deadline
-        </label>
-      </div>
-
-      <div class="task-start">
-        <label for="task-start-date">Start</label>
-        <input type="date" name="task-start-date" id="task-start-date">
-
-        <label for="task-start-time" class="hidden task-start-time">at</label>
-        <input type="time" name="task-start-time" id="task-start-time" class="hidden task-start-time">
-      </div>
-
-      <div class="task-due">
-        <label for="task-due-date">Deadline</label>
-        <input type="date" name="task-due-date" id="task-due-date">
-
-        <label for="task-due-time" class="hidden task-due-time">at</label>
-        <input type="time" name="task-due-time" id="task-due-time" class="hidden task-due-time">
-      </div>
-
-      <!-- Create the editor container -->
-      <div id="editor">
-        <p>Hello World!</p>
-        <p>Some initial <strong>bold</strong> text</p>
-        <p><br></p>
-      </div>
-
-      <!-- Include the Quill library -->
-      <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-      <!-- Initialize Quill editor -->
-      <script>
-        let toolbarOptions = [
-          // more info here: https://quilljs.com/docs/modules/toolbar/
-          ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-          [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        ];
-
-        let quill = new Quill('#editor', {
-          theme: 'snow',
-          modules: {
-            toolbar: toolbarOptions
-          }
-        });
-      </script>
-
-      <button type="button" class="cancel-button">Cancel</button>
-      <button type="submit" class="save-button">Save</button>
-    </form>
-  </div>
-
-  <script type="module" src="main.js"></script>
-</body>
-
+    <script type="module" src="./src/index.js"></script>
+  </body>
 </html>
