@@ -71,7 +71,9 @@ function isSameDate(date1, date2) {
 }
 
 function getEventsForDate(date) {
-  return null;
+  return [
+    { dataKey: 1, name: 'placeholder event', startTime: 10, endTime: 12 },
+  ];
 }
 
 function zeroPaddedDate(date) {
