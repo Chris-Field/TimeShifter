@@ -1,11 +1,11 @@
 import React from 'react';
 
-export const Day = () => {
+export const Day = ({day}) => {
   return (
-    <div className='day one'>
+      <div className='day'>
       <div className='date'>
-        <p className='date-num'></p>
-        <p className='date-day'></p>
+        <p className='date-num'>{day.dayNumber}</p>
+        <p className='date-day'>{day.dayName}</p>
       </div>
       <div className='events'></div>
     </div>

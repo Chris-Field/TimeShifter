@@ -24,7 +24,7 @@ export const Calendar = () => {
       iDate.setDate(iDate.getDate() + iDayOfWeek);
 
       tmpDays.push({
-        dayNumber: iDayOfWeek,
+        dayNumber: iDate.getDate(),
         dayName: getDayOfWeekName(iDayOfWeek, dayLimit, firstDayOfWeek),
         events: getEventsForDate(),
         isToday: isSameDate(iDate, today),
@@ -37,7 +37,6 @@ export const Calendar = () => {
   
   return (
     <div className='calendar'>
-      <>Hello from the Calendar component!</>
       <Timeline />
       <div className='days'>
         {days.map((d, index) => (

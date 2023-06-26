@@ -22,7 +22,6 @@ export const App = () => {
 
   return (
     <div className='main'>
-      <>Hello from the App component!</>
       <Calendar />
     </div>
   );

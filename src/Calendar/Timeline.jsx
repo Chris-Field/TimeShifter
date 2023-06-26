@@ -6,7 +6,6 @@ const startingTime = 8; // TODO: Convert to Military time
 export const Timeline = () => {
   return (
     <div className='timeline'>
-      <>Hello from the Timeline component</>
       <div className='spacer'></div>
       {createTimeMarkers(numHours, startingTime)}
     </div>
