@@ -23,7 +23,7 @@ function createTimeMarkers(numHours, startingTime) {
       currentHour = currentHour % 12;
     }
     timeMarkers.push(
-      <div className='time-marker' key={currentHour}>
+      <div className='time-marker' key={`${currentHour}${amPm}`}>
         {currentHour} {amPm}
       </div>
     );

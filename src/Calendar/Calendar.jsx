@@ -24,6 +24,7 @@ export const Calendar = () => {
       iDate.setDate(iDate.getDate() + iDayOfWeek);
 
       tmpDays.push({
+        id: zeroPaddedDate(iDate),
         dayNumber: iDate.getDate(),
         dayName: getDayOfWeekName(iDayOfWeek, dayLimit, firstDayOfWeek),
         events: getEventsForDate(),
@@ -31,10 +32,9 @@ export const Calendar = () => {
         date: iDate,
       });
     }
-
     setDays(tmpDays);
   }, [dayLimit, firstDayOfWeek, todayDayOfWeek]);
-  
+
   return (
     <div className='calendar'>
       <Timeline />
@@ -46,31 +46,6 @@ export const Calendar = () => {
     </div>
   );
 };
-
-/**
- * Set the date numbers on the calendar
- * @param {Number} dayLimit - User-specified number of days to show in the calendar week
- * @param {Number} firstDayOfWeek - The first day of the week, in integer form (i.e. 0 to start the calendar with Sunday, 1 for Monday, etc.)
- * @param {Number} todayDayOfWeek -
- */
-// export function updateCalendarDayNumbers(
-//   dayLimit = 7,
-//   firstDayOfWeek = 0,
-//   todayDayOfWeek
-// ) {
-//   updateCalendarHTML(function (dayElement) {
-//     const dateDay = currDate.getDate();
-//     // Find the element for the day number
-//     const currDayNumber = dayElement.querySelector(`.date > .date-num`);
-//     // Update the day number on the calendar
-//     currDayNumber.innerHTML = dateDay;
-//     // Update the day id
-//     currDayNumber.id = zeroPaddedDate(currDate);
-
-//     // Move the date forward
-//     currDate = new Date(currDate.setDate(currDate.getDate() + 1));
-//   });
-// }
 
 /**
  * Set the day names in the calendar heading
@@ -97,4 +72,10 @@ function isSameDate(date1, date2) {
 
 function getEventsForDate(date) {
   return null;
+}
+
+function zeroPaddedDate(date) {
+  const dateIso = date.toISOString();
+  const dateFormatted = dateIso.slice(0, 10);
+  return dateFormatted;
 }
